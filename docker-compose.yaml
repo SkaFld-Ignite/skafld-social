@@ -1,6 +1,6 @@
 services:
   postiz:
-    image: ghcr.io/gitroomhq/postiz-app:latest
+    image: ghcr.io/gitroomhq/postiz-app:v2.21.6
     container_name: postiz
     restart: always
     environment:
@@ -155,11 +155,10 @@ services:
 
   # For Application Monitoring / Debugging
   spotlight:
-    pull_policy: always
     container_name: spotlight
     ports:
       - 8969:8969/tcp
-    image: ghcr.io/getsentry/spotlight:latest
+    image: ghcr.io/getsentry/spotlight:2.13.0
     networks:
       - postiz-network
 

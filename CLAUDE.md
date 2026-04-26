@@ -1,61 +1,116 @@
-This project is Postiz, a tool to schedule social media and chat posts to 28+ channels.
-You can add posts to the calendar, they will be added into a workflow and posted at the right time.
-You can find things like:
-- Schedule posts
-- Calendar view
-- Analytics
-- Team management
-- Media library
+# CLAUDE.md — Project Context
+<!-- PROJECT_STATE: commit=876be6f8 timestamp=2026-04-26T00:00:00Z health=63 -->
 
-This project is a monorepo with a root only package.json of dependencies.
-Made with PNPM.
-We have 3 important folders
+## Project Identity
+- **Name**: skafld-social (fork of gitroomhq/postiz-app)
+- **Type**: Monorepo (PNPM workspaces)
+- **Platform**: Web SaaS — social media scheduling to 28+ channels
+- **Stack**: TypeScript, NestJS 10, Next.js 16, React 19, Prisma 6, Temporal, Redis
+- **Architecture**: 6 apps + 3 shared libraries, 3-layer backend (Controller >> Service >> Repository)
+- **Health**: 63/100 (red — zero tests, CLAUDE.md was inaccurate)
 
-- apps/backend - this is where the API code is (NESTJS)
-- apps/orchestrator - this is temporal, it's for background jobs (NESTJS) it contains all the workflows and activities
-- apps/frontend - this is the code of the frontend (Vite ReactJS)
-- /libraries contains a lot of services shared between backend and orchestrator and frontend components.
+## Development Commands
+```bash
+# Install
+pnpm install
 
-We are using only pnpm, don't use any other dependency manager.
-Never install frontend components from npmjs, focus on writing native components.
+# Dev (all services)
+pnpm run dev:docker   # Start Postgres, Redis, Temporal
+pnpm run dev          # Start backend, frontend, orchestrator, extension
 
-The project uses tailwind 3, before writing any component look at:
-- /apps/frontend/src/app/colors.scss
-- /apps/frontend/src/app/global.scss
-- /apps/frontend/tailwind.config.js
+# Dev (individual)
+pnpm run dev:backend
+pnpm run dev:frontend
+pnpm run dev:orchestrator
 
-All the --color-custom* are deprecated, don't use them.
+# Build
+pnpm run build
 
-And check other components in the system before to get the right design.
+# Database
+pnpm run prisma-generate    # Generate Prisma client
+pnpm run prisma-db-push     # Push schema changes
+pnpm run prisma-db-pull     # Pull schema from DB
 
-When working on the backend we need to pass the 3 layers:
-Controller >> Service >> Repository (no shortcuts)
-In some cases we will have
-Controller >> Mananger >> Service >> Repository.
+# Lint (must run from root)
+pnpm eslint .
 
-Most of the server logic should be inside of libs/server.
-The backend repository is mostly used to write controller, and import files from libs.server.
+# Test (no tests exist yet)
+pnpm test
+```
 
-For the frontend follow this:
-- Many of the UI components lives in /apps/frontend/src/components/ui
-- Routing is in /apps/frontend/src/app
-- Components are in /apps/frontend/src/components
-- always use SWR to fetch stuff, and use "useFetch" hook from /libraries/helpers/src/utils/custom.fetch.tsx
+## Project Structure
+- `apps/backend` — NestJS API server
+- `apps/frontend` — Next.js web app (port 4200)
+- `apps/orchestrator` — Temporal background job processing (NestJS)
+- `apps/extension` — Chrome browser extension
+- `apps/commands` — CLI commands
+- `apps/sdk` — Public SDK
+- `libraries/helpers` — Shared utilities (useFetch, custom hooks)
+- `libraries/nestjs-libraries` — Shared backend services, Prisma schema, integrations
+- `libraries/react-shared-libraries` — Shared React components, Sentry
 
-When using SWR, each one have to be in a seperate hook and must comply with react-hooks/rules-of-hooks, never put eslint-disable-next-line on it.
+## Active Issues
+1. **Zero test coverage** — 671 source files, no test files
+2. **Docker uses `latest` tag** — docker-compose.yaml should pin versions
+3. **35 unreleased commits** since v2.21.6 (security fixes, provider preview, mobile support)
 
-It means that this is valid:
+## Next Action
+Add integration tests for the backend API layer — this is the highest-impact improvement.
+
+## Coding Standards
+
+### Package Manager
+- Use only pnpm. Never use npm or yarn.
+- Never install frontend components from npmjs — write native components.
+
+### Backend Pattern (3 layers, no shortcuts)
+```
+Controller >> Service >> Repository
+Controller >> Manager >> Service >> Repository (when needed)
+```
+Most server logic goes in `libraries/nestjs-libraries/`.
+
+### Frontend Pattern
+- UI components: `/apps/frontend/src/components/ui`
+- Routing: `/apps/frontend/src/app`
+- Components: `/apps/frontend/src/components`
+- Always use SWR for data fetching with `useFetch` from `/libraries/helpers/src/utils/custom.fetch.tsx`
+
+### SWR Rules
+Each SWR call must be in a separate hook. Never nest SWR calls or disable eslint rules.
+
+Valid:
+```ts
 const useCommunity = () => {
    return useSWR....
 }
+```
 
-This is not valid:
+Invalid:
+```ts
 const useCommunity = () => {
   return {
     communities: () => useSWR<CommunitiesListResponse>("communities", getCommunities),
     providers: () => useSWR<ProvidersListResponse>("providers", getProviders),
   };
 }
+```
 
-- Linting of the project can run only from the root.
-- Use only pnpm.
+### Styling
+Uses Tailwind CSS 3. Before writing components, check:
+- `/apps/frontend/src/app/colors.scss`
+- `/apps/frontend/src/app/global.scss`
+- `/apps/frontend/tailwind.config.cjs`
+
+All `--color-custom*` CSS variables are deprecated — do not use them.
+Check existing components for design consistency.
+
+### Linting
+Linting can only run from the project root.
+
+## Full Context
+For detailed audit, health scorecard, roadmap, and changelog, see `.project-state/`:
+- `.project-state/audit.md` — Full discovery findings and docs analysis
+- `.project-state/health.md` — Structural health scorecard with remediation steps
+- `.project-state/roadmap.md` — Reconciled roadmap with prioritized next steps
+- `.project-state/changelog.md` — Generated changelog since last release

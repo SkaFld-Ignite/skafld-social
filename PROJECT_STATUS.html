@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Status — skafld-social</title>
+<style>
+:root {
+  --bg: #0f1117; --bg-card: #1a1d27; --bg-elevated: #252836;
+  --text: #e2e8f0; --text-muted: #94a3b8; --border: #2d3348;
+  --accent: #6366f1;
+  --green: #22c55e; --yellow: #eab308; --red: #ef4444; --gray: #6b7280;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8fafc; --bg-card: #ffffff; --bg-elevated: #f1f5f9;
+    --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; width: 240px; height: 100vh; background: var(--bg-card); border-right: 1px solid var(--border); padding: 1.5rem 1rem; overflow-y: auto; z-index: 10; }
+nav h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem; }
+nav a { display: block; padding: 0.4rem 0.75rem; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; border-radius: 6px; margin-bottom: 2px; transition: all 0.15s; }
+nav a:hover, nav a.active { background: var(--bg-elevated); color: var(--text); }
+main { margin-left: 240px; padding: 2rem 3rem; max-width: 960px; }
+h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+.badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+.badge-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); }
+.badge-gray { background: rgba(107,114,128,0.15); color: var(--gray); }
+.score { font-size: 3rem; font-weight: 700; }
+.score-red { color: var(--red); }
+.stats { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
+.stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; min-width: 140px; }
+.stat-value { font-size: 1.5rem; font-weight: 700; }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); }
+table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-weight: 600; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+details { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin: 0.75rem 0; }
+summary { padding: 0.75rem 1rem; cursor: pointer; font-weight: 600; }
+summary:hover { background: var(--bg-elevated); }
+details > div, details > table { padding: 0 1rem 1rem; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; }
+code { background: var(--bg-elevated); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+pre { background: var(--bg-elevated); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; margin: 0.5rem 0; }
+.rec { padding: 0.75rem 1rem; border-left: 3px solid; margin: 0.5rem 0; border-radius: 0 6px 6px 0; background: var(--bg-card); }
+.rec-critical { border-color: var(--red); }
+.rec-high { border-color: var(--yellow); }
+.rec-medium { border-color: var(--gray); }
+@media (max-width: 768px) { nav { display: none; } main { margin-left: 0; padding: 1rem; } }
+@media print { nav { display: none; } main { margin-left: 0; } details[open] > summary { display: none; } details { border: none; } }
+</style>
+</head>
+<body>
+<nav>
+  <h3>Project Status</h3>
+  <a href="#header">Overview</a>
+  <a href="#health">Health Scorecard</a>
+  <a href="#classification">Classification</a>
+  <a href="#docs">Documentation</a>
+  <a href="#services">Services</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="#changelog">Changelog</a>
+  <a href="#deps">Dependencies</a>
+  <a href="#recommendations">Recommendations</a>
+</nav>
+<main>
+
+<section id="header">
+  <h1>skafld-social</h1>
+  <p style="color:var(--text-muted)">Fork of gitroomhq/postiz-app &mdash; Social media scheduling platform</p>
+  <p style="color:var(--text-muted);font-size:0.8rem">Generated 2026-04-26 &bull; Commit <code>876be6f8</code> &bull; Branch <code>main</code></p>
+
+  <div style="margin:1.5rem 0">
+    <span class="score score-red">63</span><span style="color:var(--text-muted);font-size:1.25rem">/100</span>
+    <span class="badge badge-red" style="margin-left:0.75rem;font-size:0.9rem">Unhealthy</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value">671</div><div class="stat-label">Source Files</div></div>
+    <div class="stat"><div class="stat-value">0</div><div class="stat-label">Test Files</div></div>
+    <div class="stat"><div class="stat-value">35</div><div class="stat-label">Unreleased Commits</div></div>
+    <div class="stat"><div class="stat-value">v2.21.6</div><div class="stat-label">Latest Tag</div></div>
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">Docs Files</div></div>
+  </div>
+</section>
+
+<section id="health">
+  <h2>Health Scorecard</h2>
+  <details open>
+    <summary>Universal Checks</summary>
+    <table>
+      <tr><th>Category</th><th>Check</th><th>Status</th><th>Notes</th></tr>
+      <tr><td>VCS</td><td>Git initialized</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>VCS</td><td>.gitignore exists</td><td><span class="badge badge-green">PASS</span></td><td>Comprehensive</td></tr>
+      <tr><td>VCS</td><td>No secrets committed</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>VCS</td><td>Clean working tree</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>Testing</td><td>Test files exist</td><td><span class="badge badge-red">FAIL</span></td><td>Zero test files in 671 source files</td></tr>
+      <tr><td>Testing</td><td>Tests pass</td><td><span class="badge badge-red">FAIL</span></td><td>No tests to run</td></tr>
+      <tr><td>Testing</td><td>Coverage configured</td><td><span class="badge badge-yellow">WARN</span></td><td>jest.config.ts exists but unused</td></tr>
+      <tr><td>CI/CD</td><td>Pipeline exists</td><td><span class="badge badge-green">PASS</span></td><td>7 GitHub Actions workflows</td></tr>
+      <tr><td>Deps</td><td>Lock file present</td><td><span class="badge badge-green">PASS</span></td><td>pnpm-lock.yaml</td></tr>
+      <tr><td>Deps</td><td>Deps pinned</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>Deps</td><td>Dev deps separated</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>Docs</td><td>README exists</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>Docs</td><td>Contributing guide</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>Quality</td><td>Linter configured</td><td><span class="badge badge-green">PASS</span></td><td>eslint.config.mjs</td></tr>
+      <tr><td>Quality</td><td>Formatter configured</td><td><span class="badge badge-green">PASS</span></td><td>.prettierrc</td></tr>
+      <tr><td>Quality</td><td>Type checking</td><td><span class="badge badge-green">PASS</span></td><td>tsconfig.base.json</td></tr>
+    </table>
+  </details>
+  <details>
+    <summary>Stack-Specific Checks</summary>
+    <table>
+      <tr><th>Check</th><th>Status</th><th>Notes</th></tr>
+      <tr><td>engines field specified</td><td><span class="badge badge-green">PASS</span></td><td>&gt;=22.12.0 &lt;23.0.0</td></tr>
+      <tr><td>node_modules in .gitignore</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>tsconfig.json for .ts files</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>.dockerignore exists</td><td><span class="badge badge-green">PASS</span></td><td></td></tr>
+      <tr><td>No latest tag in Docker FROM</td><td><span class="badge badge-red">FAIL</span></td><td>docker-compose.yaml uses :latest</td></tr>
+    </table>
+  </details>
+</section>
+
+<section id="classification">
+  <h2>Project Classification</h2>
+  <div class="card">
+    <table>
+      <tr><td style="width:180px;color:var(--text-muted)">Repo Type</td><td>Monorepo (PNPM workspaces)</td></tr>
+      <tr><td style="color:var(--text-muted)">Primary Language</td><td>TypeScript (100%)</td></tr>
+      <tr><td style="color:var(--text-muted)">Backend</td><td>NestJS 10</td></tr>
+      <tr><td style="color:var(--text-muted)">Frontend</td><td>Next.js 16.2.1, React 19.2.4</td></tr>
+      <tr><td style="color:var(--text-muted)">Database</td><td>PostgreSQL (Prisma 6.5.0, 959-line schema)</td></tr>
+      <tr><td style="color:var(--text-muted)">Cache</td><td>Redis (ioredis)</td></tr>
+      <tr><td style="color:var(--text-muted)">Background Jobs</td><td>Temporal</td></tr>
+      <tr><td style="color:var(--text-muted)">UI</td><td>Tailwind CSS 3.4, Mantine 5, TipTap</td></tr>
+      <tr><td style="color:var(--text-muted)">AI/ML</td><td>LangChain, Mastra, OpenAI, CopilotKit</td></tr>
+      <tr><td style="color:var(--text-muted)">Monitoring</td><td>Sentry, PostHog</td></tr>
+      <tr><td style="color:var(--text-muted)">Payments</td><td>Stripe</td></tr>
+      <tr><td style="color:var(--text-muted)">Deployment</td><td>Docker Compose, Railway, GitHub Actions</td></tr>
+      <tr><td style="color:var(--text-muted)">License</td><td>AGPL-3.0</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="docs">
+  <h2>Documentation Inventory</h2>
+  <details open>
+    <summary>9 documentation files found</summary>
+    <table>
+      <tr><th>Path</th><th>Category</th><th>Status</th><th>Action</th></tr>
+      <tr><td><code>README.md</code></td><td>Governance</td><td><span class="badge badge-green">Current</span></td><td>Keep</td></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>AI Context</td><td><span class="badge badge-green">Updated</span></td><td>Fixed (was inaccurate)</td></tr>
+      <tr><td><code>CONTRIBUTING.md</code></td><td>Governance</td><td><span class="badge badge-green">Current</span></td><td>Keep</td></tr>
+      <tr><td><code>CODE_OF_CONDUCT.md</code></td><td>Governance</td><td><span class="badge badge-green">Current</span></td><td>Keep</td></tr>
+      <tr><td><code>SECURITY.md</code></td><td>Governance</td><td><span class="badge badge-green">Current</span></td><td>Keep (recently updated)</td></tr>
+      <tr><td><code>apps/frontend/README.md</code></td><td>Package Doc</td><td><span class="badge badge-gray">Unknown</span></td><td>Review</td></tr>
+      <tr><td><code>apps/sdk/README.md</code></td><td>Package Doc</td><td><span class="badge badge-gray">Unknown</span></td><td>Review</td></tr>
+      <tr><td><code>libraries/nestjs-libraries/README.md</code></td><td>Package Doc</td><td><span class="badge badge-gray">Unknown</span></td><td>Review</td></tr>
+      <tr><td><code>libraries/react-shared-libraries/README.md</code></td><td>Package Doc</td><td><span class="badge badge-gray">Unknown</span></td><td>Review</td></tr>
+    </table>
+  </details>
+  <details>
+    <summary>Missing Documentation</summary>
+    <div>
+      <ul>
+        <li>No <code>CLAUDE.md</code> in <code>apps/backend/</code>, <code>apps/frontend/</code>, or any library</li>
+        <li>No <code>AGENTS.md</code> anywhere</li>
+        <li>No architecture documentation (<code>docs/architecture/</code>)</li>
+        <li>No ADRs or <code>DECISIONS.md</code></li>
+        <li>No <code>.env.example</code> per-app (single root-level only)</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section id="services">
+  <h2>Services & Configuration</h2>
+  <details open>
+    <summary>Internal Services</summary>
+    <table>
+      <tr><th>Service</th><th>Framework</th><th>Port</th><th>Notes</th></tr>
+      <tr><td>Backend API</td><td>NestJS 10</td><td>3000</td><td>REST API with Swagger</td></tr>
+      <tr><td>Frontend</td><td>Next.js 16</td><td>4200</td><td>Web application</td></tr>
+      <tr><td>Orchestrator</td><td>NestJS + Temporal</td><td>&mdash;</td><td>Background job processing</td></tr>
+      <tr><td>Chrome Extension</td><td>Vite + CRXJS</td><td>&mdash;</td><td>Cookie-based integrations</td></tr>
+    </table>
+  </details>
+  <details>
+    <summary>External Services (20+)</summary>
+    <div>
+      <p><strong>Required:</strong> PostgreSQL, Redis, Temporal</p>
+      <p><strong>Storage:</strong> Cloudflare R2 (or local)</p>
+      <p><strong>Payments:</strong> Stripe</p>
+      <p><strong>Email:</strong> Resend</p>
+      <p><strong>AI:</strong> OpenAI, LangChain, Mastra</p>
+      <p><strong>Monitoring:</strong> Sentry, PostHog</p>
+      <p><strong>Social APIs:</strong> X, LinkedIn, Facebook, Instagram, YouTube, TikTok, Pinterest, Discord, Slack, Mastodon, Reddit, Threads, BlueSky, GitHub, Dribbble, Beehiive, and more</p>
+    </div>
+  </details>
+</section>
+
+<section id="roadmap">
+  <h2>Roadmap</h2>
+  <details open>
+    <summary>Recent Activity Themes (since v2.21.6)</summary>
+    <div>
+      <ol>
+        <li><strong>Provider Preview System</strong> &mdash; New iframe-based provider edit preview (10+ commits)</li>
+        <li><strong>Mobile App Integration</strong> &mdash; OAuth callbacks, auth changes, bridge communication</li>
+        <li><strong>Security Hardening</strong> &mdash; SSRF protection, workflow removal, security policy updates</li>
+        <li><strong>Media Improvements</strong> &mdash; Search in media library, AI video generation fixes</li>
+        <li><strong>API Enhancements</strong> &mdash; Post status change API</li>
+      </ol>
+    </div>
+  </details>
+  <details>
+    <summary>Inline TODOs (9 across 2 files)</summary>
+    <div>
+      <p>All in Mastodon provider files &mdash; likely upstream incomplete integration.</p>
+    </div>
+  </details>
+</section>
+
+<section id="changelog">
+  <h2>Changelog</h2>
+  <details open>
+    <summary>Unreleased (35 commits since v2.21.6)</summary>
+    <div>
+      <h3>Features</h3>
+      <ul>
+        <li><code>7d9b99ab</code> Provider edit preview system (9 files, +405/-9)</li>
+        <li><code>88006a76</code> Mobile app iframe integration (6 files, +123/-32)</li>
+        <li><code>5257f2fa</code> OAuth redirect URL for mobile (8 files)</li>
+        <li><code>ec8c0f6f</code> Search in media library (4 files)</li>
+        <li><code>288a4d42</code> Change post status via public API (3 files)</li>
+      </ul>
+      <h3>Security</h3>
+      <ul>
+        <li><code>071143dc</code> SSRF-safe dispatcher for webhooks & upload validation</li>
+        <li><code>da448012</code> Remove insecure PR Docker build workflow</li>
+        <li>5 commits updating SECURITY.md policy</li>
+      </ul>
+      <h3>Fixes</h3>
+      <ul>
+        <li>10+ bridge and provider validity fixes</li>
+        <li><code>e51cae16</code> Fix Instagram analytics</li>
+        <li><code>fa5d7f4c</code> Fix LinkedIn page integration</li>
+        <li><code>386fc7b0</code> Fix AI video generation</li>
+      </ul>
+    </div>
+  </details>
+  <details>
+    <summary>v2.21.6</summary>
+    <div>
+      <ul>
+        <li>Fix advisory</li>
+        <li>Instagram better error handling</li>
+        <li>Refresh token, show error</li>
+        <li>Instagram refresh fix</li>
+        <li>Subreddit posting fix with API</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section id="deps">
+  <h2>Dependencies</h2>
+  <div class="card">
+    <p><strong>Package Manager:</strong> pnpm@10.6.1</p>
+    <p><strong>Lock File:</strong> pnpm-lock.yaml (present)</p>
+    <p><strong>Total Dependencies:</strong> ~180 production + ~40 dev</p>
+    <h3 style="margin-top:1rem">Key Dependencies</h3>
+    <table>
+      <tr><th>Package</th><th>Version</th><th>Purpose</th></tr>
+      <tr><td>next</td><td>16.2.1</td><td>Frontend framework</td></tr>
+      <tr><td>react</td><td>19.2.4</td><td>UI library</td></tr>
+      <tr><td>@nestjs/core</td><td>^10.0.2</td><td>Backend framework</td></tr>
+      <tr><td>@prisma/client</td><td>6.5.0</td><td>Database ORM</td></tr>
+      <tr><td>tailwindcss</td><td>3.4.17</td><td>CSS framework</td></tr>
+      <tr><td>@temporalio/*</td><td>^1.14.0</td><td>Background jobs</td></tr>
+      <tr><td>stripe</td><td>^20.4.0</td><td>Payments</td></tr>
+      <tr><td>@sentry/*</td><td>^10.25+</td><td>Error tracking</td></tr>
+      <tr><td>swr</td><td>^2.2.5</td><td>Data fetching</td></tr>
+      <tr><td>zod</td><td>^3.25.76</td><td>Validation</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="recommendations">
+  <h2>Recommendations</h2>
+
+  <div class="rec rec-critical">
+    <strong>1. Add test infrastructure</strong>
+    <p>671 source files with zero tests. Start with integration tests for the backend API controllers and unit tests for critical business logic in nestjs-libraries.</p>
+  </div>
+
+  <div class="rec rec-critical">
+    <strong>2. CLAUDE.md updated</strong> <span class="badge badge-green">DONE</span>
+    <p>Fixed incorrect "Vite ReactJS" claim to "Next.js 16". Added dev commands, project structure, and health score.</p>
+  </div>
+
+  <div class="rec rec-high">
+    <strong>3. Tag a new release</strong>
+    <p>35 commits since v2.21.6 include security fixes (SSRF protection) and significant features (provider preview, mobile support). Consider tagging v2.22.0.</p>
+  </div>
+
+  <div class="rec rec-high">
+    <strong>4. Pin Docker image versions</strong>
+    <p>Replace <code>ghcr.io/gitroomhq/postiz-app:latest</code> with a specific version tag in docker-compose.yaml.</p>
+  </div>
+
+  <div class="rec rec-high">
+    <strong>5. Document fork relationship</strong>
+    <p>Document what's Skafld-specific vs upstream, merge/sync strategy, and customizations made.</p>
+  </div>
+
+  <div class="rec rec-medium">
+    <strong>6. Add per-app CLAUDE.md files</strong>
+    <p>Create CLAUDE.md for apps/backend/ and apps/frontend/ with app-specific patterns and conventions.</p>
+  </div>
+
+  <div class="rec rec-medium">
+    <strong>7. Create architecture documentation</strong>
+    <p>Document the 3-layer backend pattern, Temporal workflow patterns, and the social media integration/provider abstraction.</p>
+  </div>
+</section>
+
+</main>
+<script>
+const links = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+</script>
+</body>
+</html>
