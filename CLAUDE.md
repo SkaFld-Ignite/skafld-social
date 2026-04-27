@@ -2,7 +2,7 @@
 <!-- PROJECT_STATE: commit=876be6f8 timestamp=2026-04-26T00:00:00Z health=63 -->
 
 ## Project Identity
-- **Name**: skafld-social (fork of gitroomhq/postiz-app)
+- **Name**: skafld-social
 - **Type**: Monorepo (PNPM workspaces)
 - **Platform**: Web SaaS — social media scheduling to 28+ channels
 - **Stack**: TypeScript, NestJS 10, Next.js 16, React 19, Prisma 6, Temporal, Redis

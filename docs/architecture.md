@@ -179,4 +179,4 @@ The platform includes AI-powered capabilities:
 - **Docker Compose**: Production (`docker-compose.yaml`) and development (`docker-compose.dev.yaml`)
 - **Railway**: Configured via `railway.toml`
 - **CI/CD**: GitHub Actions (build, CodeQL analysis, PR quality checks)
-- **Container Registry**: `ghcr.io/gitroomhq/postiz-app`
+- **Container Registry**: `ghcr.io/skafld-ignite/skafld-social`

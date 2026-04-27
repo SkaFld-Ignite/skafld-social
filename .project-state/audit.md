@@ -1,4 +1,4 @@
-# Project Audit — skafld-social (Postiz Fork)
+# Project Audit — skafld-social
 
 Generated: 2026-04-26 | Commit: `876be6f8` | Branch: `main`
 
@@ -6,7 +6,7 @@ Generated: 2026-04-26 | Commit: `876be6f8` | Branch: `main`
 
 | Field | Value |
 |-------|-------|
-| **Name** | skafld-social (fork of gitroomhq/postiz-app) |
+| **Name** | skafld-social |
 | **Type** | Monorepo (PNPM workspaces) |
 | **Platform** | Web (SaaS) |
 | **Primary Languages** | TypeScript (100%) |
@@ -47,10 +47,8 @@ skafld-social/
 | Branch | `main` |
 | Status | Clean |
 | Origin | `https://github.com/SkaFld-Ignite/skafld-social.git` |
-| Upstream | `https://github.com/gitroomhq/postiz-app.git` |
 | Latest Tag | `v2.21.6` |
 | Commits since tag | ~35 (unreleased) |
-| Active Contributors | Nevo David (upstream), Enno Gelhaus (security) |
 
 ## Services & Configuration
 

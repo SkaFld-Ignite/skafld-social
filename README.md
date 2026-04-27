@@ -13,7 +13,7 @@
 </a>
 </p>
 
-<h3 align="center"><strong><a href="https://github.com/gitroomhq/postiz-agent">NEW: check out Postiz agent CLI! perfect for OpenClaw and other agents</a></strong></h3>
+<h3 align="center"><strong>Skafld Social — Social Media Scheduling Platform</strong></h3>
 <div align="center">
   <strong>
   <h2>Your ultimate AI social media scheduling tool</h2><br />
@@ -129,10 +129,6 @@ Link: https://opencollective.com/postiz
 - Postiz does not collect, store, or proxy API keys or access tokens from users.
 - Postiz never ask users to paste API keys into our hosted product.
 - Postiz Users always authenticate directly with the social platform (e.g., X, Discord, etc.), ensuring platform compliance and data privacy.
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=gitroomhq/postiz-app&type=date&legend=top-left)](https://www.star-history.com/#gitroomhq/postiz-app&type=date&legend=top-left)
 
 ## License
 

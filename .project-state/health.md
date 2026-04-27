@@ -40,7 +40,7 @@ Generated: 2026-04-26 | Commit: `876be6f8` | Branch: `main`
 | Check | Status | Weight | Notes |
 |-------|--------|--------|-------|
 | .dockerignore exists | PASS | — | |
-| No `latest` tag in FROM | **FAIL** | -5 | `docker-compose.yaml` uses `ghcr.io/gitroomhq/postiz-app:latest` |
+| No `latest` tag in FROM | PASS | — | Pinned to `v2.21.6` and `2.13.0` |
 
 ### Additional Issues Found
 

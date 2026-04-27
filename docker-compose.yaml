@@ -1,6 +1,6 @@
 services:
   postiz:
-    image: ghcr.io/gitroomhq/postiz-app:v2.21.6
+    image: ghcr.io/skafld-ignite/skafld-social:v2.21.6
     container_name: postiz
     restart: always
     environment:

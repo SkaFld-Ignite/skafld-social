@@ -19,7 +19,7 @@ Based on 35 unreleased commits, the project is actively working on:
 | `libraries/nestjs-libraries/src/integrations/social/mastodon.custom.provider.ts` | 2 | Implementation TODOs |
 | `libraries/nestjs-libraries/src/integrations/social/mastodon.provider.ts` | 7 | Implementation TODOs |
 
-**Recommendation**: These are in Mastodon provider files — likely from upstream and represent incomplete Mastodon integration features.
+**Recommendation**: These are in Mastodon provider files — likely inherited and represent incomplete integration features.
 
 ## Prioritized Next Steps
 
@@ -38,19 +38,12 @@ Based on 35 unreleased commits, the project is actively working on:
 **Why**: 35 commits since v2.21.6 include security fixes and significant features. These should be versioned.
 - Consider tagging v2.22.0 for the provider preview + mobile app + security work
 
-### 4. High Value — Document Fork Relationship
-**Why**: This is a fork of postiz-app. The relationship with upstream, merge strategy, and Skafld-specific customizations should be documented.
-- What's Skafld-specific vs upstream?
-- How often do we sync from upstream?
-- What customizations have been made?
-
-### 5. Nice to Have — Complete Mastodon Integration
+### 4. Nice to Have — Complete Mastodon Integration
 **Why**: 9 TODOs in mastodon providers suggest incomplete feature.
-- Review upstream progress on mastodon
-- Decide if this is Skafld-relevant
+- Review whether Mastodon is Skafld-relevant
+- Complete or remove the TODOs
 
-### 6. Defer — Architecture Documentation
-**Why**: Important but the codebase is well-structured and follows clear patterns.
-- Document the 3-layer pattern
-- Document Temporal workflow patterns
-- Document the integration/provider abstraction
+### 5. Defer — Rename Internal @gitroom Aliases
+**Why**: Internal module aliases still reference the old project name. Low priority cosmetic change.
+- Update `tsconfig.base.json` paths from `@gitroom/*` to `@skafld/*`
+- Update all import statements across the codebase

@@ -2,18 +2,16 @@
 
 ## Introduction
 
-The Postiz app is committed to ensuring the security and integrity of our users' data. This security policy outlines our procedures for handling security vulnerabilities and our disclosure policy.
+Skafld Social is committed to ensuring the security and integrity of our users' data. This security policy outlines our procedures for handling security vulnerabilities and our disclosure policy.
 
 ## Scope
 
-We, at Postiz (gitroomhq), cover the following scopes for vulnerability disclosures:
+We cover the following scopes for vulnerability disclosures:
 
-- The core repository for `postiz-app` (github.com/gitroomhq/postiz-app)
-- All `gitroomhq` repositories that are official components, tooling, or integrations of Postiz
-- Official Postiz container images published under `gitroomhq` on GHCR
-- Official Postiz CLI tools and NPM packages (NPM org: @postiz)
-- Postiz-Cloud related infrastructure & services. (API, Frontend, Configurations etc.)
-- Plugins for Postiz maintained within the `gitroomhq` organization
+- The core repository for `skafld-social` (github.com/SkaFld-Ignite/skafld-social)
+- All `SkaFld-Ignite` repositories that are official components, tooling, or integrations
+- Official container images published under `SkaFld-Ignite` on GHCR
+- Related infrastructure & services (API, Frontend, Configurations etc.)
 
 Vulnerabilities in third-party dependencies or user-hosted infrastructure are outside of this scope.
 
@@ -24,7 +22,7 @@ This project currently only supports the latest release. We recommend that users
 
 ## Reporting Security Vulnerabilities
 
-If you discover a security vulnerability in the Postiz app, please report it through the [GitHub Security Advisory system](https://github.com/gitroomhq/postiz-app/security/advisories/new).
+If you discover a security vulnerability, please report it through the [GitHub Security Advisory system](https://github.com/SkaFld-Ignite/skafld-social/security/advisories/new).
 
 When reporting a security vulnerability, please provide as much detail as possible, including:
 
