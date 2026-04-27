@@ -52,8 +52,8 @@
 ```bash
 git clone https://github.com/SkaFld-Ignite/skafld-social.git
 cp .env.example .env.local
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Team
