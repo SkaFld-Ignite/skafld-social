@@ -1,11 +1,19 @@
 import { TemporalModule } from 'nestjs-temporal-core';
+import { Module } from '@nestjs/common';
 import { socialIntegrationList } from '@gitroom/nestjs-libraries/integrations/integration.manager';
+
+@Module({})
+class TemporalNoopModule {}
 
 export const getTemporalModule = (
   isWorkers: boolean,
   path?: string,
   activityClasses?: any[]
 ) => {
+  if (process.env.DISABLE_TEMPORAL === 'true') {
+    return TemporalNoopModule;
+  }
+
   return TemporalModule.register({
     isGlobal: true,
     connection: {
