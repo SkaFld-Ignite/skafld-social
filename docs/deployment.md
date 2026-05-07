@@ -8,7 +8,7 @@ This project deploys to Railway as 3 separate services sharing a PostgreSQL data
 Railway Project: skafld-social
 ├── Service: backend        (NestJS API, port $PORT)
 ├── Service: frontend       (Next.js SSR, port $PORT)
-├── Service: orchestrator   (Temporal worker, no port)
+├── Service: orchestrator   (Temporal worker, health on $PORT)
 ├── Plugin: PostgreSQL
 ├── Plugin: Redis
 └── External: Temporal Cloud
@@ -17,8 +17,9 @@ Railway Project: skafld-social
 ## Prerequisites
 
 - [Railway CLI](https://docs.railway.com/guides/cli) installed: `npm i -g @railway/cli`
-- Railway account with a project created
-- Temporal Cloud namespace and credentials
+- Railway account (Pro plan recommended for production)
+- Temporal Cloud namespace and API key
+- Cloudflare R2 bucket for media storage (Railway containers are ephemeral — local uploads are lost on redeploy)
 - Domain configured (optional)
 
 ## Step 1: Create Railway Project
@@ -77,10 +78,20 @@ Set these on **all 3 services** (use Railway's shared variables feature):
 ### Required (all services)
 
 ```env
-DATABASE_URL=${{Postgres.DATABASE_URL}}    # Auto-injected by Railway plugin
-REDIS_URL=${{Redis.REDIS_URL}}             # Auto-injected by Railway plugin
-JWT_SECRET=<generate-a-random-string>
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+REDIS_URL=${{Redis.REDIS_URL}}
+JWT_SECRET=<generate-a-random-64-char-string>
 IS_GENERAL=true
+NODE_ENV=production
+```
+
+### Backend-specific
+
+```env
+MAIN_URL=https://<your-backend-domain>
+FRONTEND_URL=https://<your-frontend-domain>
+NEXT_PUBLIC_BACKEND_URL=https://<your-backend-domain>
+BACKEND_INTERNAL_URL=http://localhost:${{PORT}}
 ```
 
 ### Frontend-specific
@@ -88,14 +99,6 @@ IS_GENERAL=true
 ```env
 FRONTEND_URL=https://<your-frontend-domain>
 NEXT_PUBLIC_BACKEND_URL=https://<your-backend-domain>
-```
-
-### Backend-specific
-
-```env
-FRONTEND_URL=https://<your-frontend-domain>
-NEXT_PUBLIC_BACKEND_URL=https://<your-backend-domain>
-BACKEND_INTERNAL_URL=http://localhost:${{PORT}}
 ```
 
 ### Orchestrator-specific
@@ -109,20 +112,32 @@ BACKEND_INTERNAL_URL=https://<your-backend-domain>
 ```env
 TEMPORAL_ADDRESS=<namespace>.tmprl.cloud:7233
 TEMPORAL_NAMESPACE=<namespace>
-TEMPORAL_TLS_CERT=<base64-encoded-cert>
-TEMPORAL_TLS_KEY=<base64-encoded-key>
+TEMPORAL_TLS=true
+TEMPORAL_API_KEY=<your-temporal-api-key>
+```
+
+### Storage (backend — required for Railway)
+
+Railway containers are ephemeral, so `STORAGE_PROVIDER=local` will lose files on
+every redeploy. Use Cloudflare R2 instead:
+
+```env
+STORAGE_PROVIDER=cloudflare
+CLOUDFLARE_ACCOUNT_ID=<value>
+CLOUDFLARE_ACCESS_KEY=<value>
+CLOUDFLARE_SECRET_ACCESS_KEY=<value>
+CLOUDFLARE_BUCKETNAME=<value>
+CLOUDFLARE_BUCKET_URL=https://<bucket>.r2.cloudflarestorage.com/
+CLOUDFLARE_REGION=auto
 ```
 
 ### Optional
 
 ```env
-# Storage (Cloudflare R2 or local)
-STORAGE_PROVIDER=local
-UPLOAD_DIRECTORY=/uploads
-NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY=/uploads
-
 # Email
 RESEND_API_KEY=<key>
+EMAIL_FROM_ADDRESS=<address>
+EMAIL_FROM_NAME=<name>
 
 # Payments
 STRIPE_PUBLISHABLE_KEY=<key>
@@ -136,7 +151,7 @@ OPENAI_API_KEY=<key>
 NEXT_PUBLIC_SENTRY_DSN=<dsn>
 SENTRY_AUTH_TOKEN=<token>
 
-# Social media API keys (as needed)
+# Social media API keys (as needed — see .env.example for full list)
 X_API_KEY=<key>
 X_API_SECRET=<secret>
 # ... etc
@@ -146,7 +161,7 @@ X_API_SECRET=<secret>
 
 1. **Backend** — Assign a public domain (e.g., `api.skafld.social`)
 2. **Frontend** — Assign a public domain (e.g., `app.skafld.social`)
-3. **Orchestrator** — No public domain needed (internal only)
+3. **Orchestrator** — No public domain needed (internal only, but needs outbound access to Temporal Cloud)
 4. Link PostgreSQL and Redis plugins to all 3 services
 
 ## Step 6: Deploy
@@ -164,17 +179,20 @@ railway up
 
 ## Step 7: Database Migration
 
-After first deploy, run the Prisma migration:
+After first deploy, run the Prisma schema push:
 
 ```bash
 railway run pnpm run prisma-db-push
 ```
 
+> **Warning**: The `prisma-db-push` script includes `--accept-data-loss`. For production
+> databases with existing data, consider using `prisma migrate deploy` instead.
+
 ## Health Checks
 
-- **Backend**: `GET /` returns 200
-- **Frontend**: `GET /` returns 200
-- **Orchestrator**: No HTTP endpoint — Railway monitors process health
+- **Backend**: `GET /` returns 200 (port `$PORT`, default 3000)
+- **Frontend**: `GET /` returns 200 (port `$PORT`, default 4200)
+- **Orchestrator**: `GET /health/status` returns 200 (port `$PORT`, default 3002) — probes Temporal namespace connectivity
 
 ## Troubleshooting
 
@@ -185,7 +203,13 @@ Increase the service's build memory in Railway settings (default 8GB should be s
 Ensure `NEXT_PUBLIC_BACKEND_URL` points to the backend's public Railway domain with `https://`.
 
 ### Orchestrator disconnects from Temporal
-Check `TEMPORAL_ADDRESS` and TLS credentials. Ensure the orchestrator service has the Temporal env vars set.
+Check `TEMPORAL_ADDRESS`, `TEMPORAL_TLS=true`, and `TEMPORAL_API_KEY`. Ensure the orchestrator service has all Temporal env vars set.
 
 ### Database connection errors
 Verify `DATABASE_URL` is using Railway's reference variable `${{Postgres.DATABASE_URL}}` — this auto-updates if the database is restarted.
+
+### Uploads disappear after redeploy
+Railway containers are ephemeral. Switch to `STORAGE_PROVIDER=cloudflare` with R2 credentials — see the Storage section above.
+
+### CORS errors
+Ensure `MAIN_URL` is set on the backend service and matches the backend's public domain (including `https://`). The backend uses both `FRONTEND_URL` and `MAIN_URL` for the CORS allowlist.
